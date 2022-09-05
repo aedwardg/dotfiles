@@ -167,6 +167,28 @@ lvim.lsp.diagnostics.virtual_text = false
 --   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 -- end
 
+-- ####################################################
+
+-- use local Solargraph instead of Mason download
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "solargraph" })
+
+local common_opts = require("lvim/lsp").get_common_opts()
+local util = require("lspconfig/util")
+
+local opts = {
+  cmd = { "solargraph", "stdio" },
+  filetypes = { "ruby" },
+  root_dir = util.root_pattern("Gemfile", ".git"),
+  settings = {
+    solargraph = {
+      diagnostics = true
+    }
+  },
+}
+require("lspconfig")["solargraph"].setup(vim.tbl_extend("force", opts, common_opts))
+
+-- ####################################################
+
 -- -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
@@ -188,7 +210,16 @@ formatters.setup {
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
   { command = "eslint" },
-  { command = "rubocop" },
+  { command = "rubocop",
+    condition = function(utils)
+      return utils.root_has_file({ ".rubocop.yml" }) and not utils.root_has_file({ ".standard.yml" })
+    end,
+  },
+  { command = "standardrb",
+    condition = function(utils)
+      return utils.root_has_file({ ".standard.yml" })
+    end,
+  },
   { command = "haml-lint" }
   --   { command = "flake8", filetypes = { "python" } },
   --   {
