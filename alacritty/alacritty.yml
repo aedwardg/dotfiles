@@ -793,9 +793,13 @@ colors:
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
 key_bindings:
-- { key: Right, mods: Alt, chars: "\x1BF" }
-- { key: Left, mods: Alt, chars: "\x1BB" }
-- { key: Back, mods: Command, chars: "\x15" } # Delete line
+# If you cannot jump words in your terminal using
+# Alt + Left and Alt + Right, enable it with the following 
+# (may override tmux pane resize with same key bindings)
+# - { key: Right, mods: Alt, chars: "\x1BF" } # Jump word left
+# - { key: Left, mods: Alt, chars: "\x1BB" } # Jump word right
+# - { key: Back, mods: Command, chars: "\x15" } # Delete line (Mac)
+- { key: Back, mods: Control|Shift, chars: "\x15" } # Delete line (Windows/Linux)
 - { key: Back, mods: Alt, chars: "\x1b\x7f" } # Delete word
 
 #key_bindings:
