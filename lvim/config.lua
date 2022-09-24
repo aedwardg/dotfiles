@@ -10,8 +10,37 @@ an executable
 
 -- general
 lvim.log.level = "warn"
-lvim.format_on_save = true
-lvim.colorscheme = "nordbones"
+lvim.format_on_save = false
+
+lvim.colorscheme = "nordbones_custom"
+vim.g.nordbones_custom = { lighten_comments = 25 }
+vim.opt.scrolloff = 8
+vim.opt.updatetime = 50
+vim.opt.backup = false
+vim.opt.swapfile = false
+vim.opt.cmdheight = 1
+
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+
+-- ##############################################
+-- make yank highlight BLAZINGLY FAST
+
+local yank_group = augroup("HighlightYank", {})
+
+autocmd("TextYankPost", {
+  group = yank_group,
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank({
+      higroup = "IncSearch",
+      timeout = 40,
+    })
+  end,
+})
+
+-- #############################################
+
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -195,6 +224,7 @@ formatters.setup {
   --   { command = "black", filetypes = { "python" } },
   --   { command = "isort", filetypes = { "python" } },
   { command = "prettier" },
+  --   { command = "prettierd" }, -- Use for faster prettier!
   --   {
   --     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
   --     command = "prettier",
@@ -210,6 +240,7 @@ formatters.setup {
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
   { command = "eslint" },
+  -- { command = "eslint_d", extra_args = { "--rulesdir", "linters/eslint" } }, -- use eslint_d for faster eslint! Example of using an extra rulesdir.
   { command = "rubocop",
     condition = function(utils)
       return utils.root_has_file({ ".rubocop.yml" }) and not utils.root_has_file({ ".standard.yml" })
@@ -238,7 +269,12 @@ linters.setup {
 
 -- Additional Plugins
 lvim.plugins = {
-  { "shaunsingh/nord.nvim" },
+  -- some other interesting colorschemes I'll probably never use
+  -- { "shaunsingh/nord.nvim" },
+  { "olivercederborg/poimandres.nvim" },
+  { "sainnhe/everforest" },
+  { "owickstrom/vim-colors-paramount" },
+  { "ChristianChiarulli/nvcode-color-schemes.vim" },
   { "RRethy/nvim-base16" },
   { "mcchrish/zenbones.nvim",
     -- Optionally install Lush. Allows for more configuration or extending the colorscheme
