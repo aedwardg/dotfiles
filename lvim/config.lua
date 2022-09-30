@@ -20,6 +20,13 @@ vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.cmdheight = 1
 
+-- fold options
+vim.opt.foldcolumn = "0"
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+vim.opt.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
@@ -289,9 +296,23 @@ lvim.plugins = {
   --       "folke/trouble.nvim",
   --       cmd = "TroubleToggle",
   --     },
+  { "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" },
   { "easymotion/vim-easymotion" },
   { "tpope/vim-rails" }
 }
+
+-- ################################
+-- UFO SETUP
+vim.keymap.set("n", "zR", require("ufo").openAllFolds)
+vim.keymap.set("n", "zM", require("ufo").closeAllFolds)
+
+require("ufo").setup({
+  open_fold_hl_timeout = 0,
+  provider_selector = function(bufnr, filetype, buftype)
+    return { "treesitter", "indent" }
+  end,
+})
+-- ################################
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
 -- vim.api.nvim_create_autocmd("BufEnter", {
