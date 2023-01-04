@@ -90,15 +90,6 @@ keymap("x", "<space>d", "\"_d", opts)
 -- override a default keymapping
 -- lvim.keys.normal_mode["<C-q>"] = ":q<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
 
-vim.cmd [[
-  let g:EasyMotion_do_mapping = 0
-  nmap s <Plug>(easymotion-overwin-s)
-  nmap ss <Plug>(easymotion-overwin-f2)
-  nmap sw <Plug>(easymotion-w)
-  nmap  s/ <Plug>(easymotion-sn)
-  omap s/ <Plug>(easymotion-tn)
-]]
-
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 -- local _, actions = pcall(require, "telescope.actions")
@@ -346,7 +337,10 @@ linters.setup {
 -- Additional Plugins
 lvim.plugins = {
   -- some other interesting colorschemes I'll probably never use
+  -- { "arcticicestudio/nord-vim" },
+  -- { "folke/tokyonight.nvim" },
   -- { "shaunsingh/nord.nvim" },
+  { "lunarvim/colorschemes" },
   { "olivercederborg/poimandres.nvim" },
   { "sainnhe/everforest" },
   { "owickstrom/vim-colors-paramount" },
@@ -358,17 +352,43 @@ lvim.plugins = {
     -- In Vim, compat mode is turned on as Lush only works in Neovim.
     requires = "rktjmp/lush.nvim"
   },
-  { "lunarvim/colorschemes" },
-  -- { "arcticicestudio/nord-vim" }
-  -- { "folke/tokyonight.nvim" },
-  --     {
-  --       "folke/trouble.nvim",
-  --       cmd = "TroubleToggle",
-  --     },
+  {
+    "nvim-neorg/neorg",
+    config = function()
+      require('neorg').setup {
+        load = {
+          ["core.defaults"] = {},
+          ["core.norg.concealer"] = {},
+          ["core.norg.dirman"] = {
+            config = {
+              workspaces = {
+                work = "~/notes/work"
+              },
+              default_workspace = "work"
+            }
+          }
+        }
+      }
+    end,
+    requires = "nvim-lua/plenary.nvim"
+  },
   { "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" },
-  { "easymotion/vim-easymotion" },
-  { "tpope/vim-rails" }
+  {
+    "phaazon/hop.nvim",
+    branch = "v2",
+    event = "BufRead",
+    config = function()
+      require("hop").setup()
+    end,
+  },
 }
+
+-- ###############################
+-- HOP SETUP
+keymap("n", "s", ":HopChar2<cr>", { silent = true })
+keymap("n", "S", ":HopWord<cr>", { silent = true })
+keymap("n", "s/", ":HopPattern<cr>", { silent = true })
+-- ###############################
 
 -- ################################
 -- UFO SETUP
