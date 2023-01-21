@@ -137,6 +137,10 @@ lvim.builtin.telescope.pickers.git_files = {
   },
 }
 
+lvim.builtin.telescope.on_config_done = function(telescope)
+ pcall(telescope.load_extension, "live_grep_args")
+end
+
 -- Change theme settings
 -- lvim.builtin.theme.options.dim_inactive = true
 -- lvim.builtin.theme.options.style = "storm"
@@ -144,6 +148,17 @@ lvim.builtin.telescope.pickers.git_files = {
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["#"] = { ":set invrelativenumber<cr>", "Toggle relative line numbers" }
 lvim.builtin.which_key.mappings["p"] = {}
+
+-- timeout override for formatters
+lvim.builtin.which_key.mappings["l"]["f"] = {
+  function()
+    require("lvim.lsp.utils").format { timeout_ms = 2000 }
+  end,
+  "Format",
+}
+
+lvim.builtin.which_key.mappings["g"]["v"] = { "<cmd>Telescope git_status<cr>", "Status" }
+lvim.builtin.which_key.mappings["s"]["a"] = { "<cmd>Telescope live_grep_args<cr>", "Text (with args)" }
 
 -- lvim.builtin.which_key.mappings["t"] = {
 --   name = "+Trouble",
@@ -210,15 +225,6 @@ lvim.builtin.treesitter.ensure_installed = {
 lvim.builtin.treesitter.ignore_install = { "haskell" }
 lvim.builtin.treesitter.highlight.enable = true
 
--- timeout override for formatters
-lvim.builtin.which_key.mappings["l"]["f"] = {
-  function()
-    require("lvim.lsp.utils").format { timeout_ms = 2000 }
-  end,
-  "Format",
-}
-
-lvim.builtin.which_key.mappings["g"]["v"] = { "<cmd>Telescope git_status<cr>", "Status" }
 
 -- generic LSP settings
 
@@ -352,6 +358,7 @@ lvim.plugins = {
     -- In Vim, compat mode is turned on as Lush only works in Neovim.
     requires = "rktjmp/lush.nvim"
   },
+  { "nvim-telescope/telescope-live-grep-args.nvim" },
   {
     "nvim-neorg/neorg",
     config = function()
