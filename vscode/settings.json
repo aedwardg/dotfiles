@@ -1,0 +1,128 @@
+{
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorCustomizations": {
+    // "diffEditor.removedTextBackground": "#ff00d441",
+    // "diffEditor.insertedTextBackground": "#0084ff21",
+    // "editor.selectionBackground": "#aa00ff37", //Currently SELECTED text
+    // "editor.selectionHighlightBackground": "#e788ff3c", //Same content as selection
+    // "editor.findMatchBackground": "#0029ccb5", //Current SEARCH MATCH
+    // "editor.findMatchHighlightBackground": "#0029cc41", //Other SEARCH MATCHES
+    // "editor.hoverHighlightBackground": "#e788ff3c",
+    // "editor.wordHighlightBackground": "#e788ff3c",
+    // "editor.wordHighlightStrongBackground": "#e788ff3c",
+    // "editorGutter.addedBackground": "#0084ff81",
+    // "editorGutter.deletedBackground": "#ff00d481",
+    // "editorGutter.modifiedBackground": "#ffbb00ab",
+    // "sash.hoverBorder": "#463150",
+    // "numberedBookmarks.lineBackground": "#007700",
+    // "editorIndentGuide.activeBackground": "#f81ce5cc"
+    "editorIndentGuide.background": "#ffffff11",
+    "editorIndentGuide.activeBackground": "#ffffff99",
+    "editorBracketPairGuide.activeBackground1": "#ffffff77",
+    "editorBracketPairGuide.activeBackground2": "#ffffff77",
+    "editorBracketPairGuide.activeBackground3": "#ffffff77",
+    "editorBracketPairGuide.activeBackground4": "#ffffff77",
+    "editorBracketPairGuide.activeBackground5": "#ffffff77",
+    "editorBracketPairGuide.activeBackground6": "#ffffff77",
+    "gitDecoration.modifiedResourceForeground": "#ffbb00ab"
+    // "terminal.ansiBlack": "#41505E",
+    // "terminal.ansiRed": "#d95468",
+    // "terminal.ansiGreen": "#8bd49c",
+    // "terminal.ansiYellow": "#ebbf83",
+    // "terminal.ansiBlue": "#539afc",
+    // "terminal.ansiMagenta": "#b62d65",
+    // "terminal.ansiCyan": "#70e1e8",
+    // "terminal.ansiWhite": "#ffffff",
+    // "terminal.ansiBrightBlack": "#41505E",
+    // "terminal.ansiBrightRed": "#d95468",
+    // "terminal.ansiBrightGreen": "#8bd49c",
+    // "terminal.ansiBrightYellow": "#ebbf83",
+    // "terminal.ansiBrightBlue": "#539afc",
+    // "terminal.ansiBrightMagenta": "#b62d65",
+    // "terminal.ansiBrightCyan": "#70e1e8",
+    // "terminal.ansiBrightWhite": "#ffffff",
+
+    // "terminal.background": "#171d23",
+    // "terminal.foreground": "#ffffff",
+    // "terminalCursor.background": "#008B94",
+    // "terminalCursor.foreground": "#008B94"
+  },
+  "ruby.intellisense": "rubyLocate",
+  "ruby.useLanguageServer": true,
+  "ruby.format": "rubocop",
+  "ruby.lint": {
+    "rubocop": {
+      "useBundler": true
+    }
+  },
+  "editor.tabSize": 2,
+  "prettier.requireConfig": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[git-commit]": {
+    "editor.rulers": [50, 72],
+    "workbench.editor.restoreViewState": false
+  },
+  "prettier.configPath": ".prettierrc.js",
+  "prettier.prettierPath": "node_modules/prettier",
+  "editor.guides.bracketPairs": "active",
+  "files.autoSave": "onFocusChange",
+  "material-icon-theme.saturation": 0.7,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "gitlens.currentLine.enabled": false,
+  "gitlens.codeLens.enabled": false,
+  "vim.easymotion": true,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
+    }
+  ],
+  "vim.operatorPendingModeKeyBindings": [
+    {
+      "before": ["L"],
+      "after": ["$"]
+    },
+    {
+      "before": ["H"],
+      "after": ["^"]
+    }
+  ],
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<leader>", "d"],
+      "after": ["d", "d"]
+    },
+    {
+      "before": ["<C-n>"],
+      "commands": [":nohl"]
+    },
+    {
+      "before": ["leader", "w"],
+      "commands": ["workbench.action.files.save"]
+    }
+  ],
+  "vim.leader": "<space>",
+  "vim.handleKeys": {
+    "<C-a>": false,
+    "<C-f>": false
+  },
+  "zenMode.centerLayout": false,
+  "zenMode.hideLineNumbers": false,
+  "zenMode.hideStatusBar": false,
+  "workbench.editor.tabCloseButton": "off",
+  "breadcrumbs.symbolPath": "off",
+  "editor.minimap.enabled": false,
+  "files.trimTrailingWhitespace": true,
+  "workbench.colorTheme": "Nord",
+  "editor.formatOnSave": true,
+  "window.zoomLevel": 1
+}
