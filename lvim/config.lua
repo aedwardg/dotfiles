@@ -63,6 +63,8 @@ local keymap = vim.api.nvim_set_keymap
 
 -- Insert --
 keymap("i", "jj", "<ESC>", opts)
+-- Make Shift+tab do reverse tab
+keymap("i", "<S-tab>", "<C-d>", opts)
 
 -- Visual --
 -- Move text up and down
@@ -138,7 +140,7 @@ lvim.builtin.telescope.pickers.git_files = {
 }
 
 lvim.builtin.telescope.on_config_done = function(telescope)
- pcall(telescope.load_extension, "live_grep_args")
+  pcall(telescope.load_extension, "live_grep_args")
 end
 
 -- Change theme settings
@@ -159,6 +161,7 @@ lvim.builtin.which_key.mappings["l"]["f"] = {
 
 lvim.builtin.which_key.mappings["g"]["v"] = { "<cmd>Telescope git_status<cr>", "Status" }
 lvim.builtin.which_key.mappings["s"]["a"] = { "<cmd>Telescope live_grep_args<cr>", "Text (with args)" }
+lvim.builtin.which_key.mappings["s"]["u"] = { "<cmd>Telescope resume<cr>", "Resume search" }
 
 -- lvim.builtin.which_key.mappings["t"] = {
 --   name = "+Trouble",
@@ -179,6 +182,15 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 lvim.builtin.breadcrumbs.active = false
+
+lvim.builtin.autopairs.on_config_done = function()
+  local npairs = require("nvim-autopairs")
+  local Rule = require("nvim-autopairs.rule")
+  npairs.add_rules({
+    Rule("<%","%>",{"elixir", "eelixir", "heex"}),
+    Rule("<>","</>",{"elixir", "eelixir", "heex", "html", "typescriptreact"}),
+  })
+end
 
 -- Lualine Config --
 local components = require("lvim.core.lualine.components")
@@ -324,7 +336,12 @@ linters.setup {
       return utils.root_has_file({ ".standard.yml" })
     end,
   },
-  { command = "haml-lint" },
+  {
+    command = "haml-lint",
+    env = {
+      RUBYOPT = "-W0"
+    }
+  },
   --   { command = "flake8", filetypes = { "python" } },
   --   {
   --     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
