@@ -19,6 +19,7 @@ vim.opt.updatetime = 50
 vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.cmdheight = 1
+lvim.transparent_window = true
 
 -- fold options
 vim.opt.foldcolumn = "0"
@@ -187,8 +188,8 @@ lvim.builtin.autopairs.on_config_done = function()
   local npairs = require("nvim-autopairs")
   local Rule = require("nvim-autopairs.rule")
   npairs.add_rules({
-    Rule("<%","%>",{"elixir", "eelixir", "heex"}),
-    Rule("<>","</>",{"elixir", "eelixir", "heex", "html", "typescriptreact"}),
+    Rule("<%", "%>", { "elixir", "eelixir", "heex" }),
+    Rule("<>", "</>", { "elixir", "eelixir", "heex", "html", "typescriptreact" }),
   })
 end
 
@@ -326,12 +327,14 @@ local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
   -- { command = "eslint" },
   { command = "eslint_d", extra_args = { "--rulesdir", "linters/eslint" } }, -- use eslint_d for faster eslint! Example of using an extra rulesdir.
-  { command = "rubocop",
+  {
+    command = "rubocop",
     condition = function(utils)
       return utils.root_has_file({ ".rubocop.yml" }) and not utils.root_has_file({ ".standard.yml" })
     end,
   },
-  { command = "standardrb",
+  {
+    command = "standardrb",
     condition = function(utils)
       return utils.root_has_file({ ".standard.yml" })
     end,
@@ -369,7 +372,9 @@ lvim.plugins = {
   { "owickstrom/vim-colors-paramount" },
   { "ChristianChiarulli/nvcode-color-schemes.vim" },
   { "RRethy/nvim-base16" },
-  { "mcchrish/zenbones.nvim",
+  { "EdenEast/nightfox.nvim" },
+  {
+    "mcchrish/zenbones.nvim",
     -- Optionally install Lush. Allows for more configuration or extending the colorscheme
     -- If you don't want to install lush, make sure to set g:zenbones_compat = 1
     -- In Vim, compat mode is turned on as Lush only works in Neovim.
@@ -396,7 +401,7 @@ lvim.plugins = {
     end,
     requires = "nvim-lua/plenary.nvim"
   },
-  { "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" },
+  { "kevinhwang91/nvim-ufo",                       requires = "kevinhwang91/promise-async" },
   {
     "phaazon/hop.nvim",
     branch = "v2",
