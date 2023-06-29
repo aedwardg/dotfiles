@@ -111,33 +111,15 @@ keymap("x", "<space>d", "\"_d", opts)
 --   },
 -- }
 
+
 -- Telescope Settings
+-- Set lvim telescope defaults to utilize screen width and show preview
 lvim.builtin.telescope.defaults.path_display = { shorten = { len = 4, exclude = { 1, -1 } } }
-lvim.builtin.telescope.pickers.live_grep = {
-  layout_strategy = "horizontal",
-  layout_config = {
-    width = 0.9,
-    height = 0.9,
-    prompt_position = "bottom",
-  },
-}
-
-lvim.builtin.telescope.pickers.find_files = {
-  layout_strategy = "horizontal",
-  layout_config = {
-    width = 0.9,
-    height = 0.9,
-    prompt_position = "bottom",
-  },
-}
-
-lvim.builtin.telescope.pickers.git_files = {
-  layout_strategy = "horizontal",
-  layout_config = {
-    width = 0.9,
-    height = 0.9,
-    prompt_position = "bottom",
-  },
+lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
+lvim.builtin.telescope.defaults.layout_config = {
+  width = 0.9,
+  height = 0.9,
+  prompt_position = "bottom",
 }
 
 lvim.builtin.telescope.on_config_done = function(telescope)
@@ -151,6 +133,12 @@ end
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["#"] = { ":set invrelativenumber<cr>", "Toggle relative line numbers" }
 lvim.builtin.which_key.mappings["p"] = {}
+
+-- make the important telescope searches show preivew
+lvim.builtin.which_key.mappings["f"] = {
+  require("lvim.core.telescope.custom-finders").find_project_files,
+  "Find File"
+}
 
 -- timeout override for formatters
 lvim.builtin.which_key.mappings["l"]["f"] = {
@@ -204,11 +192,18 @@ lvim.builtin.lualine.sections.lualine_x = {
 }
 
 -- Bufferline Config --
+lvim.builtin.bufferline.options.show_buffer_close_icons = false
+
+-- remove visible separator/indicator lines
+lvim.builtin.bufferline.options.indicator = { icon = nil }
+lvim.builtin.bufferline.options.separator_style = { '', '' }
+
 lvim.builtin.bufferline.highlights = {
   background = {
     italic = true,
   },
   buffer_selected = {
+    bg = "NONE",
     bold = true,
   },
   fill = {
@@ -216,7 +211,7 @@ lvim.builtin.bufferline.highlights = {
       attribute = "bg",
       highlight = "Normal"
     }
-  }
+  },
 }
 
 -- if you don't want all the parsers change this to a table of the ones you want
@@ -255,8 +250,9 @@ lvim.builtin.treesitter.highlight.enable = true
 --     toggle_server_expand = "o",
 -- }
 
-lvim.lsp.diagnostics.virtual_text = false
-
+-- changed when upgrading to v1.3
+-- lvim.lsp.diagnostics.virtual_text = false
+vim.diagnostic.config({ virtual_text = false })
 -- ---@usage disable automatic installation of servers
 -- lvim.lsp.installer.setup.automatic_installation = false
 
@@ -325,7 +321,6 @@ formatters.setup {
 -- -- set additional linters
 local linters = require "lvim.lsp.null-ls.linters"
 linters.setup {
-  -- { command = "eslint" },
   { command = "eslint_d", extra_args = { "--rulesdir", "linters/eslint" } }, -- use eslint_d for faster eslint! Example of using an extra rulesdir.
   {
     command = "rubocop",
@@ -363,7 +358,6 @@ linters.setup {
 -- Additional Plugins
 lvim.plugins = {
   -- some other interesting colorschemes I'll probably never use
-  -- { "arcticicestudio/nord-vim" },
   -- { "folke/tokyonight.nvim" },
   -- { "shaunsingh/nord.nvim" },
   { "lunarvim/colorschemes" },
@@ -378,17 +372,21 @@ lvim.plugins = {
     -- Optionally install Lush. Allows for more configuration or extending the colorscheme
     -- If you don't want to install lush, make sure to set g:zenbones_compat = 1
     -- In Vim, compat mode is turned on as Lush only works in Neovim.
-    requires = "rktjmp/lush.nvim"
+    dependencies = "rktjmp/lush.nvim"
   },
   { "nvim-telescope/telescope-live-grep-args.nvim" },
+  -- ###############################
+  -- NEORG SETUP
   {
     "nvim-neorg/neorg",
+    build = ":Neorg sync-parsers",
+    dependencies = "nvim-lua/plenary.nvim",
     config = function()
       require('neorg').setup {
         load = {
           ["core.defaults"] = {},
-          ["core.norg.concealer"] = {},
-          ["core.norg.dirman"] = {
+          ["core.concealer"] = {},
+          ["core.dirman"] = {
             config = {
               workspaces = {
                 work = "~/notes/work"
@@ -398,10 +396,13 @@ lvim.plugins = {
           }
         }
       }
-    end,
-    requires = "nvim-lua/plenary.nvim"
+    end
   },
-  { "kevinhwang91/nvim-ufo",                       requires = "kevinhwang91/promise-async" },
+-- ###############################
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async"
+  },
   {
     "phaazon/hop.nvim",
     branch = "v2",
