@@ -130,6 +130,8 @@ end
 -- lvim.builtin.theme.options.dim_inactive = true
 -- lvim.builtin.theme.options.style = "storm"
 
+-- show registers with which-key on "
+lvim.builtin.which_key.setup.plugins.registers = true
 -- Use which-key to add extra bindings with the leader-key prefix
 lvim.builtin.which_key.mappings["#"] = { ":set invrelativenumber<cr>", "Toggle relative line numbers" }
 lvim.builtin.which_key.mappings["p"] = {}
@@ -340,6 +342,9 @@ linters.setup {
       RUBYOPT = "-W0"
     }
   },
+  {
+    name = "credo"
+  },
   --   { command = "flake8", filetypes = { "python" } },
   --   {
   --     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
@@ -398,7 +403,7 @@ lvim.plugins = {
       }
     end
   },
--- ###############################
+  -- ###############################
   {
     "kevinhwang91/nvim-ufo",
     dependencies = "kevinhwang91/promise-async"
