@@ -256,7 +256,7 @@ lvim.builtin.treesitter.highlight.enable = true
 -- lvim.lsp.diagnostics.virtual_text = false
 vim.diagnostic.config({ virtual_text = false })
 -- ---@usage disable automatic installation of servers
--- lvim.lsp.installer.setup.automatic_installation = false
+lvim.lsp.installer.setup.automatic_installation = true
 
 -- ---configure a server manually. !!Requires `:LvimCacheReset` to take effect!!
 -- ---see the full default list `:lua print(vim.inspect(lvim.lsp.automatic_configuration.skipped_servers))`
@@ -283,7 +283,13 @@ vim.diagnostic.config({ virtual_text = false })
 -- ####################################################
 
 -- use local Solargraph instead of Mason download
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "solargraph" })
+-- elixirls
+-- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "solargraph", "elixirls" })
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "solargraph", "gleam" })
+
+lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
+  return server ~= "lexical"
+end, lvim.lsp.automatic_configuration.skipped_servers)
 
 local common_opts = require("lvim/lsp").get_common_opts()
 local util = require("lspconfig/util")
@@ -302,6 +308,40 @@ require("lspconfig")["solargraph"].setup(vim.tbl_extend("force", opts, common_op
 
 -- ####################################################
 
+-- use Lexical LSP
+local lspconfig = require("lspconfig")
+-- local configs = require("lspconfig.configs")
+
+-- local lexical_config = {
+--   filetypes = { "elixir", "eelixir", "heex" },
+--   cmd = { "/Users/anthony.garcia/oss/lexical/_build/dev/package/lexical/bin/start_lexical.sh" },
+--   settings = {},
+-- }
+
+-- if not configs.lexical then
+--   configs.lexical = {
+--     default_config = {
+--       filetypes = lexical_config.filetypes,
+--       cmd = lexical_config.cmd,
+--       root_dir = function(fname)
+--         return lspconfig.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.os_homedir()
+--       end,
+--       -- optional settings
+--       settings = lexical_config.settings,
+--     },
+--   }
+-- end
+
+-- lspconfig.lexical.setup(common_opts)
+
+-- ####################################################
+local gleam_opts = {
+  cmd = { 'gleam', 'lsp' },
+  filetypes = { 'gleam' },
+  root_dir = util.root_pattern('gleam.toml', '.git'),
+}
+
+lspconfig.gleam.setup(vim.tbl_extend("force", gleam_opts, common_opts))
 
 -- -- set a formatter, this will override the language server formatting capabilities (if it exists)
 local formatters = require "lvim.lsp.null-ls.formatters"
@@ -342,9 +382,9 @@ linters.setup {
       RUBYOPT = "-W0"
     }
   },
-  {
-    name = "credo"
-  },
+  -- {
+  --   name = "credo"
+  -- },
   --   { command = "flake8", filetypes = { "python" } },
   --   {
   --     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
@@ -363,14 +403,14 @@ linters.setup {
 -- Additional Plugins
 lvim.plugins = {
   -- some other interesting colorschemes I'll probably never use
-  -- { "folke/tokyonight.nvim" },
-  -- { "shaunsingh/nord.nvim" },
+  { "folke/tokyonight.nvim" },
+  { "shaunsingh/nord.nvim" },
   { "lunarvim/colorschemes" },
   { "olivercederborg/poimandres.nvim" },
   { "sainnhe/everforest" },
   { "owickstrom/vim-colors-paramount" },
   { "ChristianChiarulli/nvcode-color-schemes.vim" },
-  { "RRethy/nvim-base16" },
+  -- { "RRethy/nvim-base16" },
   { "EdenEast/nightfox.nvim" },
   {
     "mcchrish/zenbones.nvim",
@@ -380,6 +420,7 @@ lvim.plugins = {
     dependencies = "rktjmp/lush.nvim"
   },
   { "nvim-telescope/telescope-live-grep-args.nvim" },
+  { "lewis6991/fileline.nvim" },
   -- ###############################
   -- NEORG SETUP
   {
@@ -416,6 +457,28 @@ lvim.plugins = {
       require("hop").setup()
     end,
   },
+  {
+    "elixir-tools/elixir-tools.nvim",
+    version = "*",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local elixir = require("elixir")
+      local elixirls = require("elixir.elixirls")
+
+      elixir.setup {
+        nextls = { enable = false },
+        credo = { enable = true },
+        elixirls = {
+          enable = true,
+          -- enable = true,
+          settings = elixirls.settings {
+            dialyzerEnabled = false,
+            enableTestLenses = false,
+          },
+        }
+      }
+    end
+  }
 }
 
 -- ###############################
